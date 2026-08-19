@@ -6,7 +6,7 @@ Sistema web para controle e gestão de ativos de TI da Lopes Distribuidora.
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/seu-usuario/inventario-ti-lopes.git
+git clone https://github.com/FelipeRauzer/inventario-ti-lopes.git
 cd inventario-ti-lopes
 ```
 
