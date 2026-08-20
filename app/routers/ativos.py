@@ -8,6 +8,11 @@ router = APIRouter(prefix="/ativos", tags=["Ativos"])
 
 @router.post("/", response_model=AtivoResponse, status_code=201)
 def criar_ativo(ativo: AtivoCreate, db: Session = Depends(get_db)):
+    existente = db.query(Ativo).filter(Ativo.numero_serie == ativo.numero_serie).first()
+    if existente:
+        raise HTTPException(status_code=400, detail="Número de série já cadastrado.")
+    if ativo.status == "Descartado" and ativo.cod_func:
+        raise HTTPException(status_code=400, detail="Ativo descartado não pode ser vinculado a um funcionário.")
     novo = Ativo(**ativo.model_dump())
     db.add(novo)
     db.commit()
@@ -30,6 +35,11 @@ def atualizar_ativo(ativo_id: int, dados: AtivoUpdate, db: Session = Depends(get
     ativo = db.query(Ativo).filter(Ativo.id == ativo_id).first()
     if not ativo:
         raise HTTPException(status_code=404, detail="Ativo não encontrado.")
+
+    status_novo = dados.status or ativo.status
+    func_novo = dados.cod_func if dados.cod_func is not None else ativo.cod_func
+    if status_novo == "Descartado" and func_novo:
+        raise HTTPException(status_code=400, detail="Ativo descartado não pode ser vinculado a um funcionário.")
 
     for campo, valor in dados.model_dump(exclude_unset=True).items():
         setattr(ativo, campo, valor)
