@@ -11,5 +11,8 @@ class AppConfig(BaseSettings):
     project_name: str = "Inventário TI Lopes"
     api_version: str = "v1"
     upload_dir: str = "./uploads"
-
+    oracle_dsn: str = ""
+    oracle_user: str = ""
+    oracle_password: str = ""
+    
 settings = AppConfig()

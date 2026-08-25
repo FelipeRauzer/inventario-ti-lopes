@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.ativos import Ativo
 from app.schemas.ativo import AtivoCreate, AtivoUpdate, AtivoResponse
+from app.services.winthor_service import buscar_funcionarios
 
 router = APIRouter(prefix="/ativos", tags=["Ativos"])
 
@@ -22,6 +23,11 @@ def criar_ativo(ativo: AtivoCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=list[AtivoResponse])
 def listar_ativos(db: Session = Depends(get_db)):
     return db.query(Ativo).all()
+
+@router.get("/winthor/funcionarios")
+def buscar_func_winthor(nome:str):
+    resultados = buscar_funcionarios(nome)
+    return resultados
 
 @router.get("/{ativo_id}", response_model=AtivoResponse)
 def buscar_ativo(ativo_id: int, db: Session = Depends(get_db)):

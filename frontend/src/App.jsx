@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import AtivosList from './pages/AtivosList';
 import AtivoForm from './pages/AtivoForm';
@@ -8,9 +8,9 @@ import AtivoDetalhes from './pages/AtivoDetalhes';
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gray-900">
-        <Navbar />
-        <main className="max-w-7xl mx-auto px-4 py-8">
+      <div className="app-layout">
+        <Sidebar />
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/ativos" element={<AtivosList />} />
