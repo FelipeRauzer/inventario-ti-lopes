@@ -45,7 +45,6 @@ def login_obrigatorio(token: str = Depends(oauth2_scheme), db: Session = Depends
     return usuario
 
 def admin_obrigatorio(usuario_atual: Usuario = Depends(login_obrigatorio)) -> Usuario:
-    """Só permite acesso se o usuário for admin."""
     if not usuario_atual.admin:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

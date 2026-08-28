@@ -13,6 +13,12 @@ const menuItems = [
   ]},
 ];
 
+const menuAdmin = [
+  { section: 'ADMINISTRAÇÃO', items: [
+    { path: '/usuarios', label: 'Usuários', icon: '👥' },
+  ]},
+];
+
 function Sidebar() {
   const location = useLocation();
   const { usuario, fazerLogout } = useAuth();
@@ -33,11 +39,20 @@ function Sidebar() {
           <div key={group.section} className="nav-group">
             <div className="nav-section">{group.section}</div>
             {group.items.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
-              >
+              <Link key={item.path} to={item.path} className={`nav-item ${isActive(item.path) ? 'active' : ''}`}>
+                <span className="nav-icon">{item.icon}</span>
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        ))}
+
+        {/* Menu só pra admin */}
+        {usuario?.admin && menuAdmin.map((group) => (
+          <div key={group.section} className="nav-group">
+            <div className="nav-section">{group.section}</div>
+            {group.items.map((item) => (
+              <Link key={item.path} to={item.path} className={`nav-item ${isActive(item.path) ? 'active' : ''}`}>
                 <span className="nav-icon">{item.icon}</span>
                 {item.label}
               </Link>
@@ -46,15 +61,12 @@ function Sidebar() {
         ))}
       </nav>
 
-      {/* Usuário logado + logout */}
       <div className="sidebar-user">
         <div className="sidebar-user-info">
           <div className="sidebar-user-avatar">👤</div>
           <div className="sidebar-user-email">{usuario?.email}</div>
         </div>
-        <button onClick={fazerLogout} className="sidebar-logout">
-          Sair
-        </button>
+        <button onClick={fazerLogout} className="sidebar-logout">Sair</button>
       </div>
 
       <div className="sidebar-footer">

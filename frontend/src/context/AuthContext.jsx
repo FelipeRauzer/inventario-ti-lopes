@@ -7,7 +7,6 @@ export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
   const [carregando, setCarregando] = useState(true);
 
-  // Ao iniciar, verifica se já tem token salvo
   useEffect(() => {
     const token = localStorage.getItem('token');
     const usuarioSalvo = localStorage.getItem('usuario');
@@ -21,12 +20,12 @@ export function AuthProvider({ children }) {
     const response = await loginApi(email, senha);
     const { access_token } = response.data;
 
-    // Salva o token
     localStorage.setItem('token', access_token);
 
-    // Decodifica o token pra pegar info do usuário (sem biblioteca extra)
+    // Decodifica o token e extrai email e admin
     const payload = JSON.parse(atob(access_token.split('.')[1]));
-    const dadosUsuario = { email: payload.sub };
+    const dadosUsuario = { email: payload.sub, admin: payload.admin };
+
     localStorage.setItem('usuario', JSON.stringify(dadosUsuario));
     setUsuario(dadosUsuario);
 

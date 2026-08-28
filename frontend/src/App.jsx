@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import AtivosList from './pages/AtivosList';
 import AtivoForm from './pages/AtivoForm';
 import AtivoDetalhes from './pages/AtivoDetalhes';
+import Usuarios from './pages/Usuarios';
 
 function Layout({ children }) {
   return (
@@ -52,6 +53,11 @@ function App() {
           <Route path="/ativos/:id/editar" element={
             <PrivateRoute>
               <Layout><AtivoForm /></Layout>
+            </PrivateRoute>
+          } />
+          <Route path="/usuarios" element={
+            <PrivateRoute>
+              <Layout><Usuarios /></Layout>
             </PrivateRoute>
           } />
 

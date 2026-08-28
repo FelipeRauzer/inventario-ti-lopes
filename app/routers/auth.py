@@ -25,5 +25,5 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
             detail="Usuário inativo."
         )
     
-    token = criar_token({"sub": usuario.email})
+    token = criar_token({"sub": usuario.email, "admin": usuario.admin})
     return {"access_token": token, "token_type": "bearer"}
