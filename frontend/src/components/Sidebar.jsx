@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const menuItems = [
   { section: 'PRINCIPAL', items: [
@@ -14,6 +15,7 @@ const menuItems = [
 
 function Sidebar() {
   const location = useLocation();
+  const { usuario, fazerLogout } = useAuth();
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -43,6 +45,17 @@ function Sidebar() {
           </div>
         ))}
       </nav>
+
+      {/* Usuário logado + logout */}
+      <div className="sidebar-user">
+        <div className="sidebar-user-info">
+          <div className="sidebar-user-avatar">👤</div>
+          <div className="sidebar-user-email">{usuario?.email}</div>
+        </div>
+        <button onClick={fazerLogout} className="sidebar-logout">
+          Sair
+        </button>
+      </div>
 
       <div className="sidebar-footer">
         <div className="footer-logo">Grupo Lopes</div>

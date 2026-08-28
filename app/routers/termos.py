@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.termos import Termo
+from app.models.usuario import Usuario
 from app.schemas.termo import TermoCreate, TermoResponse
+from app.auth import login_obrigatorio
 import os       
 import uuid
 from datetime import date
@@ -17,7 +19,8 @@ async def criar_termo(
     cod_func: int = Form(...),
     data_assinatura: date = Form(...),
     arquivo: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db), 
+    usuario_atual: Usuario = Depends(login_obrigatorio)
 ):
     #Verifica se é PDF
     if not arquivo.filename.lower().endswith(".pdf"):
@@ -54,12 +57,12 @@ async def criar_termo(
     
     
 @router.get("/ativo/{ativo_id}", response_model=list[TermoResponse])
-def buscar_termo(ativo_id: int, db: Session =  Depends(get_db)):
+def buscar_termo(ativo_id: int, db: Session =  Depends(get_db), usuario_atual: Usuario = Depends(login_obrigatorio)):
     return db.query(Termo).filter(Termo.ativo_id == ativo_id).all()
     
 
 @router.delete("/{termo_id}", status_code=204)
-def deletar_termo(termo_id: int, db: Session = Depends(get_db)):
+def deletar_termo(termo_id: int, db: Session = Depends(get_db), usuario_atual: Usuario = Depends(login_obrigatorio)):
     termo = db.query(Termo).filter(Termo.id == termo_id).first()
     if not termo:
         raise HTTPException(status_code=404, detail="Termo não encontrado.")

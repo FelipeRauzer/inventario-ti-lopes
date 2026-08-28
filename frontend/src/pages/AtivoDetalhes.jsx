@@ -3,6 +3,11 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { buscarAtivo, deletarAtivo, listarMovimentacoesDoAtivo, listarTermosDoAtivo, criarTermo, deletarTermo } from '../services/api';
 import TopBar from '../components/TopBar';
 
+function formatarData(str) {                                          
+  if (!str) return null;                                       
+  const [ano, mes, dia] = str.split('T')[0].split('-');        
+  return `${dia}/${mes}/${ano.slice(-2)}`;                     
+}                                                                 
 function AtivoDetalhes() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -125,8 +130,8 @@ function AtivoDetalhes() {
           <div className="panel-body">
             <div className="detail-grid">
               <Info label="Valor Estimado" value={ativo.valor_estimado ? `R$ ${ativo.valor_estimado.toLocaleString('pt-BR')}` : null} />
-              <Info label="Data Fabricação" value={ativo.data_fabricacao} />
-              <Info label="Previsão Troca" value={ativo.previsao_troca} />
+              <Info label="Data Fabricação" value={formatarData(ativo.data_fabricacao)} />
+              <Info label="Previsão Troca" value={formatarData(ativo.previsao_troca)} />
               <Info label="Cadastrado em" value={ativo.data_cadastro ? new Date(ativo.data_cadastro).toLocaleDateString('pt-BR') : null} />
             </div>
           </div>
@@ -154,7 +159,7 @@ function AtivoDetalhes() {
               <tbody>
                 {movimentacoes.map(m => (
                   <tr key={m.id}>
-                    <td>{m.data_movimentacao}</td>
+                    <td>{formatarData(m.data_movimentacao)}</td>
                     <td><span className="badge badge-blue">{m.tipo}</span></td>
                     <td>{m.motivo || '-'}</td>
                     <td>{m.status_origem && m.status_destino ? `${m.status_origem} → ${m.status_destino}` : '-'}</td>
@@ -209,7 +214,7 @@ function AtivoDetalhes() {
                   <span>📄</span>
                   <div style={{flex: 1}}>
                     <div>Funcionário: {t.cod_func}</div>
-                    <div className="termo-date">Assinado em: {t.data_assinatura}</div>
+                    <div className="termo-date">Assinado em: {formatarData(t.data_assinatura)}</div>
                   </div>
                   <button onClick={() => handleDeletarTermo(t.id)} className="action-delete">Excluir</button>
                 </div>

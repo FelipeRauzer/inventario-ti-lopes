@@ -42,6 +42,31 @@ uvicorn app.main:app --reload
 - **Documentação Swagger:** http://localhost:8000/docs
 - **Documentação ReDoc:** http://localhost:8000/redoc
 
+## Como rodar
+
+### Backend (API)
+```bash
+cd inventario-ti-lopes
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+uvicorn app.main:app --reload
+```
+Acesse: http://localhost:8000/docs
+
+### Frontend (Interface)
+Em **outra aba** do terminal:
+```bash
+cd inventario-ti-lopes/frontend
+npm install
+npm run dev
+```
+Acesse: http://localhost:5173
+
+> ⚠️ Os dois precisam estar rodando ao mesmo tempo!
+
+
 ## Estrutura do projeto
 
 ```

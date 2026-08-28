@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import engine, Base
-from app.routers import ativos, termos, movimentacao
+from app.routers import ativos, termos, movimentacao, usuario,auth
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -24,6 +25,8 @@ app.add_middleware(
 app.include_router(ativos.router)
 app.include_router(termos.router)
 app.include_router(movimentacao.router)
+app.include_router(usuario.router)
+app.include_router(auth.router)
 
 @app.get("/", tags=["Root"])
 def root():

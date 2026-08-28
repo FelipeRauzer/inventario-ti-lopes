@@ -5,6 +5,28 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Interceptor — adiciona o token em todo request automaticamente
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Interceptor — se vier 401, desloga automaticamente
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Ativos
 export const criarAtivo = (dados) => api.post('/ativos/', dados);
 export const listarAtivos = () => api.get('/ativos/');
@@ -25,5 +47,13 @@ export const deletarTermo = (id) => api.delete(`/termos/${id}`);
 // Movimentações
 export const criarMovimentacao = (dados) => api.post('/movimentacao/', dados);
 export const listarMovimentacoesDoAtivo = (id) => api.get(`/movimentacao/ativo/${id}`);
+
+// Auth
+export const login = (email, senha) => {
+  const formData = new FormData();
+  formData.append('username', email);
+  formData.append('password', senha);
+  return axios.post('http://localhost:8000/auth/login', formData);
+};
 
 export default api;

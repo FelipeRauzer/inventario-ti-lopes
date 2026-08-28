@@ -14,5 +14,6 @@ class AppConfig(BaseSettings):
     oracle_dsn: str = ""
     oracle_user: str = ""
     oracle_password: str = ""
+    secret_key: str = ""
     
 settings = AppConfig()
